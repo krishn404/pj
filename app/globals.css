@@ -1,0 +1,417 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Nudge-folio inspired palette - white/cream background with colorful accents */
+  --background: oklch(0.99 0.002 90);
+  --foreground: oklch(0.12 0 0);
+  --card: oklch(0.99 0.002 90);
+  --card-foreground: oklch(0.12 0 0);
+  --popover: oklch(0.99 0.002 90);
+  --popover-foreground: oklch(0.12 0 0);
+  --primary: oklch(0.12 0 0);
+  --primary-foreground: oklch(0.99 0.002 90);
+  --secondary: oklch(0.96 0.005 90);
+  --secondary-foreground: oklch(0.12 0 0);
+  --muted: oklch(0.92 0.008 90);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent-gold: oklch(0.82 0.15 85);
+  --accent-mint: oklch(0.88 0.12 175);
+  --accent-pink: oklch(0.72 0.18 10);
+  --accent-cream: oklch(0.92 0.04 90);
+  --accent: var(--accent-gold);
+  --accent-foreground: oklch(0.12 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --border: oklch(0.88 0.01 90);
+  --input: oklch(0.94 0.005 90);
+  --ring: oklch(0.12 0 0);
+  --radius: 0rem;
+  
+  /* Custom accent colors */
+  --gold: #E8B84A;
+  --mint: #8DD8C5;
+  --pink: #E85A71;
+  --cream: #F5E6C8;
+  --cyan: #4AC3E8;
+}
+
+@theme inline {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', monospace;
+  --font-display: 'Inter', system-ui, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Grid background pattern — graph-paper hero */
+.grid-background {
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Hero canvas — Figma-like graph paper */
+.hero-canvas {
+  --hero-cyan: #00aaff;
+  --hero-black: #0a0a0a;
+  --hero-fill: #111111;
+  --hero-mint-note: #7ecec4;
+  --hero-cream-note: #e8d5a3;
+  --hero-badge-yellow: #f5c542;
+  --hero-badge-pink: #e8436a;
+  --hero-green: #4caf50;
+  background-color: #f0f0f0;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+@keyframes hero-float {
+  0% { transform: translateY(-6px); }
+  100% { transform: translateY(6px); }
+}
+
+@keyframes hero-float-slow {
+  0% { transform: translateY(-4px); }
+  100% { transform: translateY(4px); }
+}
+
+@keyframes hero-pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.85; }
+}
+
+.hero-float {
+  animation: hero-float 3s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.hero-float-delay {
+  animation: hero-float 3s ease-in-out infinite alternate;
+  animation-delay: 0.75s;
+  will-change: transform;
+}
+
+.hero-float-slow {
+  animation: hero-float-slow 4s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.hero-float-slow-delay {
+  animation: hero-float-slow 4s ease-in-out infinite alternate;
+  animation-delay: 1s;
+  will-change: transform;
+}
+
+/* Sticky note tape labels */
+.hero-sticky-note {
+  box-shadow:
+    1px 2px 0 rgba(0, 0, 0, 0.08),
+    2px 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.hero-sticky-mint {
+  background-color: var(--hero-mint-note);
+  color: #1a1a1a;
+}
+
+.hero-sticky-cream {
+  background-color: var(--hero-cream-note);
+  color: #1a1a1a;
+}
+
+/* Figma selection frame */
+.hero-selection-frame {
+  border: 2px solid var(--hero-cyan);
+  pointer-events: none;
+}
+
+.hero-selection-handle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--hero-cyan);
+  border: 2px solid #ffffff;
+  box-sizing: border-box;
+  z-index: 30;
+}
+
+/* Name box with left-to-right hover fill */
+.hero-name-box {
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+
+.hero-name-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 0%;
+  background: var(--hero-fill);
+  transition: width 0.4s ease-in-out;
+  z-index: 0;
+}
+
+.hero-name-box:hover::before {
+  width: 100%;
+}
+
+.hero-name-text {
+  position: relative;
+  z-index: 1;
+  color: var(--hero-black);
+  transition: color 0.4s ease-in-out;
+}
+
+.hero-name-box:hover .hero-name-text {
+  color: #ffffff;
+}
+
+.font-foldit {
+  font-family: var(--font-foldit), sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Pill presence badges with tail */
+.hero-pill-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
+}
+
+.hero-pill-yellow {
+  background: var(--hero-badge-yellow);
+  color: #1a1a1a;
+}
+
+.hero-pill-pink {
+  background: var(--hero-badge-pink);
+  color: #ffffff;
+}
+
+.hero-pill-tail-right {
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 8px solid var(--hero-badge-yellow);
+}
+
+.hero-pill-tail-left {
+  position: absolute;
+  left: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 8px solid var(--hero-badge-pink);
+}
+
+.hero-pill-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Contact pill button */
+.hero-contact-btn {
+  display: inline-flex;
+  align-items: stretch;
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.hero-contact-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 20px rgba(0, 170, 255, 0.35);
+}
+
+.hero-availability-dot {
+  animation: hero-pulse-dot 2s ease-in-out infinite;
+}
+
+/* Ruler marks pattern */
+.ruler-marks {
+  position: relative;
+}
+.ruler-marks::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 99px,
+    rgba(0, 0, 0, 0.1) 99px,
+    rgba(0, 0, 0, 0.1) 100px
+  );
+}
+
+/* Film grain overlay */
+.grain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: oklch(0.12 0 0 / 0.15);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.12 0 0 / 0.3);
+}
+
+/* Selection */
+::selection {
+  background: var(--gold);
+  color: oklch(0.12 0 0);
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Editorial text styles */
+.text-editorial {
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+}
+
+.text-editorial-body {
+  letter-spacing: -0.01em;
+  line-height: 1.6;
+}
+
+/* Hero typography — Google Fonts via layout.tsx */
+.font-glory {
+  font-family: var(--font-give-you-glory), cursive;
+}
+
+
+/* Horizontal scroll section */
+.horizontal-scroll {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.horizontal-scroll > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* Sticky note styles */
+.sticky-note {
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* Selection box handles (legacy sections) */
+.selection-handle {
+  width: 8px;
+  height: 8px;
+  background: var(--cyan);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Colorful tag styles */
+.tag-gold {
+  background: var(--gold);
+  color: oklch(0.12 0 0);
+}
+
+.tag-mint {
+  background: var(--mint);
+  color: oklch(0.12 0 0);
+}
+
+.tag-pink {
+  background: var(--pink);
+  color: white;
+}
+
+.tag-cream {
+  background: var(--cream);
+  color: oklch(0.12 0 0);
+}
