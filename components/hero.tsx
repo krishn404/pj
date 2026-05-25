@@ -46,7 +46,7 @@ function FlowerIcon() {
   )
 }
 
-function SelectionHandles() {
+function SelectionHandles({ isHovered }: { isHovered: boolean }) {
   const positions = [
     "top-0 left-0 -translate-x-1/2 -translate-y-1/2",
     "top-0 left-1/2 -translate-x-1/2 -translate-y-1/2",
@@ -59,11 +59,25 @@ function SelectionHandles() {
   ]
 
   return (
-    <div className="absolute inset-0 hero-selection-frame">
-      {positions.map((pos) => (
-        <span key={pos} className={`hero-selection-handle ${pos}`} />
+    <motion.div 
+      className="absolute inset-0 hero-selection-frame"
+      animate={{ 
+        scale: isHovered ? 1.02 : 1,
+        borderWidth: isHovered ? "3px" : "2px"
+      }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+    >
+      {positions.map((pos, i) => (
+        <motion.span 
+          key={pos} 
+          className={`hero-selection-handle ${pos}`}
+          animate={{ 
+            scale: isHovered ? 1.2 : 1,
+          }}
+          transition={{ duration: 0.2, delay: i * 0.02 }}
+        />
       ))}
-    </div>
+    </motion.div>
   )
 }
 
@@ -81,6 +95,7 @@ function SpeechBubbleAvatar({ side }: { side: "left" | "right" }) {
 export function Hero() {
   const [mounted, setMounted] = useState(false)
   const [currentTime, setCurrentTime] = useState("")
+  const [nameHovered, setNameHovered] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -101,7 +116,7 @@ export function Hero() {
   }, [])
 
   return (
-    <section className="hero-canvas relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 md:px-10 overflow-hidden">
+    <section id="home" className="hero-canvas relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 md:px-10 overflow-hidden">
       <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center py-16 md:py-20">
         {/* Live timestamp */}
         <motion.p
@@ -184,11 +199,13 @@ export function Hero() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             className="relative z-10 w-full max-w-[min(100%,720px)] px-2 sm:px-4"
+            onMouseEnter={() => setNameHovered(true)}
+            onMouseLeave={() => setNameHovered(false)}
           >
             <div className="relative px-1 sm:px-2 py-1">
-              <SelectionHandles />
+              <SelectionHandles isHovered={nameHovered} />
               <div className="hero-name-box px-4 sm:px-8 md:px-12 py-5 sm:py-6 md:py-8">
-                <h1 className="hero-name-text font-foldit text-center leading-[0.92] text-[clamp(2.75rem,11vw,8.75rem)]">
+                <h1 className="hero-name-text font-boldonse text-center leading-[0.92] text-[clamp(2.75rem,11vw,8.75rem)]">
                   {heroContent.nameLine1}
                   <br />
                   {heroContent.nameLine2}
