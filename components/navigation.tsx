@@ -4,10 +4,11 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
 const navItems = [
-  { label: "Home", href: "#", icon: "home" },
+  { label: "Home", href: "#home", icon: "home" },
   { label: "About", href: "#about", icon: "star" },
-  { label: "Case Study", href: "#work", icon: "folder" },
-  { label: "Playground", href: "#showreel", icon: "play" },
+  { label: "Showreel", href: "#showreel", icon: "play" },
+  { label: "Work", href: "#work", icon: "folder" },
+  { label: "Experience", href: "#experience", icon: "briefcase" },
 ]
 
 export function Navigation() {
@@ -18,7 +19,25 @@ export function Navigation() {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 100)
+      
+      // Update active item based on scroll position
+      const sections = navItems.map(item => ({
+        id: item.href.replace("#", ""),
+        label: item.label
+      }))
+      
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = document.getElementById(sections[i].id)
+        if (section) {
+          const rect = section.getBoundingClientRect()
+          if (rect.top <= 150) {
+            setActiveItem(sections[i].label)
+            break
+          }
+        }
+      }
     }
+    
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
@@ -36,11 +55,12 @@ export function Navigation() {
         <nav className="flex items-center justify-between px-6 md:px-12 py-4">
           {/* Logo */}
           <motion.a
-            href="#"
+            href="#home"
             className="flex items-center gap-2"
             whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <div className="w-8 h-8 rounded-full border-2 border-foreground flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full border-2 border-foreground flex items-center justify-center transition-colors hover:bg-foreground hover:text-background">
               <span className="text-xs font-bold">PJ</span>
             </div>
           </motion.a>
@@ -56,11 +76,10 @@ export function Navigation() {
               >
                 <a
                   href={item.href}
-                  onClick={() => setActiveItem(item.label)}
                   className={`flex items-center gap-2 px-4 py-2 text-xs font-mono uppercase tracking-wider transition-all duration-300 rounded-full ${
                     activeItem === item.label 
                       ? "bg-foreground text-background" 
-                      : "text-muted-foreground hover:text-foreground"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                   }`}
                 >
                   {item.icon === "home" && (
@@ -80,9 +99,13 @@ export function Navigation() {
                   )}
                   {item.icon === "play" && (
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                      <line x1="3" y1="9" x2="21" y2="9" />
-                      <line x1="9" y1="21" x2="9" y2="9" />
+                      <polygon points="5 3 19 12 5 21 5 3" />
+                    </svg>
+                  )}
+                  {item.icon === "briefcase" && (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
                     </svg>
                   )}
                   {item.label}

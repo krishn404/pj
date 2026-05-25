@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
-import { Inter, Give_You_Glory, Foldit } from 'next/font/google'
+import { Inter, Give_You_Glory, Foldit, Boldonse } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { site } from '@/lib/content'
+import { LenisProvider } from '@/components/lenis-provider'
 import './globals.css'
 
 const inter = Inter({ 
@@ -20,6 +21,13 @@ const giveYouGlory = Give_You_Glory({
 const foldit = Foldit({
   subsets: ['latin'],
   variable: '--font-foldit',
+  display: 'swap',
+});
+
+const boldonse = Boldonse({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-boldonse',
   display: 'swap',
 });
 
@@ -59,10 +67,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${giveYouGlory.variable} ${foldit.variable} bg-background`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${giveYouGlory.variable} ${foldit.variable} ${boldonse.variable} bg-background`} suppressHydrationWarning>
       <body className="font-sans antialiased" suppressHydrationWarning>
-        <div className="grain" aria-hidden="true" />
-        {children}
+        <LenisProvider>
+          <div className="grain" aria-hidden="true" />
+          {children}
+        </LenisProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
