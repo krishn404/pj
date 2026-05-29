@@ -13,19 +13,6 @@ export function Skills() {
       ref={containerRef}
       className="py-32 md:py-48 px-6 md:px-12 bg-secondary relative overflow-hidden"
     >
-      <motion.div
-        initial={{ opacity: 0, x: -100 }}
-        animate={isInView ? { opacity: 0.1, x: 0 } : {}}
-        transition={{ duration: 1 }}
-        className="absolute top-20 left-10 w-32 h-32 bg-[var(--gold)] rounded-full hidden lg:block"
-      />
-      <motion.div
-        initial={{ opacity: 0, x: 100 }}
-        animate={isInView ? { opacity: 0.1, x: 0 } : {}}
-        transition={{ duration: 1, delay: 0.2 }}
-        className="absolute bottom-40 right-20 w-24 h-24 bg-[var(--pink)] rounded-[30%_70%_70%_30%/30%_30%_70%_70%] hidden lg:block"
-      />
-
       <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

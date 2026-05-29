@@ -14,13 +14,13 @@ export const site = {
   phone: "+91 62831-31811",
   phoneDisplay: "+91 62831-31811",
   instagram: {
-    handle: "@priyankajoshi",
-    url: "https://instagram.com",
+    handle: "@priyankaa.comm",
+    url: "https://instagram.com/priyankaa.comm",
   },
 } as const
 
 export const hero = {
-  introLabel: "my name is",
+  introLabel: "hey, my name is",
   nameLine1: "PRIYANKA",
   nameLine2: "JOSHI",
   currentRole: "Freelance Video Editor",

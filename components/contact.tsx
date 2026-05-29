@@ -23,19 +23,6 @@ export function Contact() {
       id="contact"
       className="py-32 md:py-48 px-6 md:px-12 bg-primary text-primary-foreground relative overflow-hidden"
     >
-      <motion.div
-        initial={{ opacity: 0, scale: 0 }}
-        animate={isInView ? { opacity: 1, scale: 1 } : {}}
-        transition={{ duration: 0.8, delay: 0.3 }}
-        className="absolute top-20 right-20 w-24 h-24 bg-[var(--mint)] rounded-[40%_60%_70%_30%/40%_50%_60%_50%] opacity-20 hidden lg:block"
-      />
-      <motion.div
-        initial={{ opacity: 0, scale: 0 }}
-        animate={isInView ? { opacity: 1, scale: 1 } : {}}
-        transition={{ duration: 0.8, delay: 0.5 }}
-        className="absolute bottom-40 left-20 w-16 h-16 bg-[var(--gold)] rounded-full opacity-20 hidden lg:block"
-      />
-
       <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

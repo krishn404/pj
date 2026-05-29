@@ -14,20 +14,6 @@ export function Experimental() {
       ref={containerRef}
       className="py-32 md:py-48 px-6 md:px-12 bg-primary text-primary-foreground relative overflow-hidden"
     >
-      {/* Decorative shapes */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0 }}
-        animate={isInView ? { opacity: 0.1, scale: 1 } : {}}
-        transition={{ duration: 1, delay: 0.3 }}
-        className="absolute top-20 right-20 w-40 h-40 bg-[var(--mint)] rounded-[30%_70%_70%_30%/30%_30%_70%_70%] hidden lg:block"
-      />
-      <motion.div
-        initial={{ opacity: 0, scale: 0 }}
-        animate={isInView ? { opacity: 0.1, scale: 1 } : {}}
-        transition={{ duration: 1, delay: 0.5 }}
-        className="absolute bottom-40 left-10 w-24 h-24 bg-[var(--gold)] rounded-full hidden lg:block"
-      />
-
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section header */}
         <motion.div
