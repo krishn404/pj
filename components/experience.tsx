@@ -2,9 +2,13 @@
 
 import { motion, useInView, useScroll, useTransform } from "framer-motion"
 import { useRef } from "react"
-import { experience as experienceContent } from "@/lib/content"
+import type { ExperienceSectionDTO } from "@/lib/cms/types/portfolio"
 
-export function Experience() {
+type ExperienceProps = {
+  experience: ExperienceSectionDTO
+}
+
+export function Experience({ experience: experienceContent }: ExperienceProps) {
   const containerRef = useRef<HTMLElement>(null)
   const isInView = useInView(containerRef, { once: true, margin: "-100px" })
 
@@ -14,13 +18,6 @@ export function Experience() {
   })
 
   const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"])
-
-  const companyColors: Record<string, string> = {
-    Vibrantick: "var(--cyan)",
-    "Ellement Co.": "var(--pink)",
-    "Tharun Speaks": "var(--mint)",
-    Napstack: "var(--cream)",
-  }
 
   return (
     <section
@@ -64,7 +61,7 @@ export function Experience() {
           <div className="space-y-16 md:space-y-24">
             {experienceContent.items.map((exp, index) => (
               <motion.div
-                key={`${exp.period}-${exp.role}`}
+                key={exp.id}
                 initial={{ opacity: 0, y: 40, x: index % 2 === 0 ? -20 : 20 }}
                 animate={isInView ? { opacity: 1, y: 0, x: 0 } : {}}
                 transition={{ duration: 0.6, delay: index * 0.15 }}
@@ -117,18 +114,18 @@ export function Experience() {
           <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
             {experienceContent.companyLogos.map((company, index) => (
               <motion.div
-                key={company}
+                key={company.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.4, delay: 0.9 + index * 0.1 }}
                 whileHover={{
                   scale: 1.1,
-                  color: companyColors[company] ?? "var(--foreground)",
+                  color: company.accentColor,
                 }}
                 style={{ color: "var(--muted-foreground)" }}
                 className="text-lg md:text-xl font-light transition-colors cursor-pointer"
               >
-                {company}
+                {company.name}
               </motion.div>
             ))}
           </div>

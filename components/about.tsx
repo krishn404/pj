@@ -2,9 +2,13 @@
 
 import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
-import { about as aboutContent } from "@/lib/content"
+import type { AboutDTO } from "@/lib/cms/types/portfolio"
 
-export function About() {
+type AboutProps = {
+  about: AboutDTO
+}
+
+export function About({ about: aboutContent }: AboutProps) {
   const containerRef = useRef<HTMLElement>(null)
   const isInView = useInView(containerRef, { once: true, margin: "-100px" })
 

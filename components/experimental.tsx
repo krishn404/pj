@@ -2,9 +2,14 @@
 
 import { motion, useInView } from "framer-motion"
 import { useRef, useState } from "react"
-import { experimental as experimentalContent } from "@/lib/content"
+import type { ExperimentalSectionDTO } from "@/lib/cms/types/portfolio"
+import { VideoEmbedFrame } from "@/components/video-embed-frame"
 
-export function Experimental() {
+type ExperimentalProps = {
+  experimental: ExperimentalSectionDTO
+}
+
+export function Experimental({ experimental: experimentalContent }: ExperimentalProps) {
   const containerRef = useRef<HTMLElement>(null)
   const isInView = useInView(containerRef, { once: true, margin: "-100px" })
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
@@ -15,7 +20,6 @@ export function Experimental() {
       className="py-32 md:py-48 px-6 md:px-12 bg-primary text-primary-foreground relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -34,7 +38,7 @@ export function Experimental() {
             initial={{ opacity: 0, y: 40 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="mt-4 text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-pixel"
+            className="mt-4 text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-pixel break-words"
           >
             {experimentalContent.title}
           </motion.h2>
@@ -48,72 +52,30 @@ export function Experimental() {
           </motion.p>
         </motion.div>
 
-        {/* Experimental videos grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-          {experimentalContent.videoPlaceholders.map((label, index) => (
+          {experimentalContent.items.map((item, index) => (
             <motion.div
-              key={label}
+              key={item.id}
               initial={{ opacity: 0, y: 40, scale: 0.95 }}
               animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
               transition={{ duration: 0.6, delay: index * 0.15 }}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
               whileHover={{ y: -8 }}
-              className="relative aspect-[4/3] bg-primary-foreground/5 overflow-hidden cursor-pointer group"
+              className="cursor-pointer"
             >
-              {/* Selection frame */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
-                className="absolute inset-2 border-2 border-[var(--cyan)] pointer-events-none z-20"
-              >
-                <div className="selection-handle absolute -top-1 -left-1" />
-                <div className="selection-handle absolute -top-1 -right-1" />
-                <div className="selection-handle absolute -bottom-1 -left-1" />
-                <div className="selection-handle absolute -bottom-1 -right-1" />
-              </motion.div>
-
-              {/* Placeholder content */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <motion.div
-                  animate={{
-                    scale: hoveredIndex === index ? 1.1 : 1,
-                    rotate: hoveredIndex === index ? 5 : 0,
-                  }}
-                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-center"
-                >
-                  <div className="w-16 h-16 border border-primary-foreground/20 flex items-center justify-center mx-auto mb-4">
-                    <motion.span
-                      animate={{ 
-                        color: hoveredIndex === index ? "var(--cyan)" : "var(--primary-foreground)",
-                      }}
-                      className="text-2xl font-black text-pixel"
-                    >
-                      {String(index + 1).padStart(2, "0")}
-                    </motion.span>
-                  </div>
-                  <p className="text-sm text-primary-foreground/50 font-mono uppercase tracking-wider">
-                    {label}
-                  </p>
-                </motion.div>
-              </div>
-
-              {/* Hover color overlay */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: hoveredIndex === index ? 0.1 : 0 }}
-                transition={{ duration: 0.4 }}
-                className="absolute inset-0"
-                style={{ 
-                  background: `linear-gradient(135deg, var(--mint) 0%, var(--cyan) 100%)`,
-                }}
+              <VideoEmbedFrame
+                media={item.media}
+                title={item.label}
+                placeholderLabel={String(index + 1).padStart(2, "0")}
+                placeholderCta={item.label}
+                aspect="4/3"
+                variant="dark"
+                isHovered={hoveredIndex === index}
+                onHoverChange={(hovered) => setHoveredIndex(hovered ? index : null)}
               />
             </motion.div>
           ))}
         </div>
 
-        {/* Footer note */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}

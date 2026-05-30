@@ -3,15 +3,20 @@
 import { motion, useInView } from "framer-motion"
 import { useRef, useState } from "react"
 import { ArrowUpRight, Mail, Phone, Instagram } from "lucide-react"
-import { contact as contactContent, site } from "@/lib/content"
+import type { ContactSectionDTO, SiteDTO } from "@/lib/cms/types/portfolio"
+
+type ContactProps = {
+  contact: ContactSectionDTO
+  site: SiteDTO
+}
 
 const iconMap = {
-  Email: Mail,
-  Phone: Phone,
-  Instagram: Instagram,
+  email: Mail,
+  phone: Phone,
+  instagram: Instagram,
 } as const
 
-export function Contact() {
+export function Contact({ contact: contactContent, site }: ContactProps) {
   const containerRef = useRef<HTMLElement>(null)
   const isInView = useInView(containerRef, { once: true, margin: "-100px" })
   const [hoveredLink, setHoveredLink] = useState<string | null>(null)
@@ -56,8 +61,8 @@ export function Contact() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {contactContent.links.map((link, index) => {
-            const Icon = iconMap[link.label as keyof typeof iconMap]
-            const isExternal = "external" in link && link.external
+            const Icon = iconMap[link.iconKey as keyof typeof iconMap] ?? Mail
+            const isExternal = link.external
 
             return (
               <motion.a
@@ -119,7 +124,7 @@ export function Contact() {
         >
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <p className="text-sm text-primary-foreground/50">
-              {contactContent.footer.copyright(currentYear)}
+              {`© ${currentYear} ${site.name}. All rights reserved.`}
             </p>
 
             <a

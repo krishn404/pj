@@ -2,30 +2,67 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import type { PublicNavItem } from "@/lib/cms/section-meta"
 
-const navItems = [
-  { label: "Home", href: "#home", icon: "home" },
-  { label: "About", href: "#about", icon: "star" },
-  { label: "Showreel", href: "#showreel", icon: "play" },
-  { label: "Work", href: "#work", icon: "folder" },
-  { label: "Experience", href: "#experience", icon: "briefcase" },
-]
+type NavigationProps = {
+  logoText?: string
+  items: PublicNavItem[]
+  showContact?: boolean
+}
 
-export function Navigation() {
+function NavIcon({ icon }: { icon: PublicNavItem["icon"] }) {
+  if (icon === "home") {
+    return (
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+      </svg>
+    )
+  }
+  if (icon === "star") {
+    return (
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+      </svg>
+    )
+  }
+  if (icon === "folder") {
+    return (
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+      </svg>
+    )
+  }
+  if (icon === "play") {
+    return (
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <polygon points="5 3 19 12 5 21 5 3" />
+      </svg>
+    )
+  }
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+    </svg>
+  )
+}
+
+export function Navigation({ logoText = "PJ", items, showContact = true }: NavigationProps) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [activeItem, setActiveItem] = useState("Home")
+  const [activeItem, setActiveItem] = useState(items[0]?.label ?? "Home")
 
   useEffect(() => {
+    if (items.length === 0) return
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 100)
-      
-      // Update active item based on scroll position
-      const sections = navItems.map(item => ({
+
+      const sections = items.map((item) => ({
         id: item.href.replace("#", ""),
-        label: item.label
+        label: item.label,
       }))
-      
+
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = document.getElementById(sections[i].id)
         if (section) {
@@ -37,10 +74,17 @@ export function Navigation() {
         }
       }
     }
-    
+
     window.addEventListener("scroll", handleScroll)
+    handleScroll()
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+  }, [items])
+
+  useEffect(() => {
+    if (items.length > 0 && !items.some((i) => i.label === activeItem)) {
+      setActiveItem(items[0].label)
+    }
+  }, [items, activeItem])
 
   return (
     <>
@@ -53,83 +97,59 @@ export function Navigation() {
         }`}
       >
         <nav className="flex items-center justify-between px-6 md:px-12 py-4">
-          {/* Logo */}
           <motion.a
-            href="#home"
+            href={items[0]?.href ?? "#home"}
             className="flex items-center gap-2"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             <div className="w-8 h-8 rounded-full border-2 border-foreground flex items-center justify-center transition-colors hover:bg-foreground hover:text-background">
-              <span className="text-xs font-bold">PJ</span>
+              <span className="text-xs font-bold">{logoText}</span>
             </div>
           </motion.a>
 
-          {/* Desktop Nav - nudge-folio style */}
-          <ul className="hidden md:flex items-center gap-1 bg-background border border-border rounded-full px-2 py-1">
-            {navItems.map((item, i) => (
-              <motion.li
-                key={item.label}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 + 0.3, duration: 0.5 }}
-              >
-                <a
-                  href={item.href}
-                  className={`flex items-center gap-2 px-4 py-2 text-xs font-mono uppercase tracking-wider transition-all duration-300 rounded-full ${
-                    activeItem === item.label 
-                      ? "bg-foreground text-background" 
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                  }`}
+          {items.length > 0 && (
+            <ul className="hidden md:flex items-center gap-1 bg-background border border-border rounded-full px-2 py-1 max-w-[min(100vw-12rem,42rem)] overflow-x-auto">
+              {items.map((item, i) => (
+                <motion.li
+                  key={`${item.href}-${item.label}`}
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 + 0.3, duration: 0.5 }}
+                  className="shrink-0"
                 >
-                  {item.icon === "home" && (
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                    </svg>
-                  )}
-                  {item.icon === "star" && (
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                    </svg>
-                  )}
-                  {item.icon === "folder" && (
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
-                    </svg>
-                  )}
-                  {item.icon === "play" && (
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <polygon points="5 3 19 12 5 21 5 3" />
-                    </svg>
-                  )}
-                  {item.icon === "briefcase" && (
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-                      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-                    </svg>
-                  )}
-                  {item.label}
-                </a>
-              </motion.li>
-            ))}
-          </ul>
+                  <a
+                    href={item.href}
+                    className={`flex items-center gap-2 px-4 py-2 text-xs font-mono uppercase tracking-wider transition-all duration-300 rounded-full whitespace-nowrap ${
+                      activeItem === item.label
+                        ? "bg-foreground text-background"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                    }`}
+                  >
+                    <NavIcon icon={item.icon} />
+                    {item.label}
+                  </a>
+                </motion.li>
+              ))}
+            </ul>
+          )}
 
-          {/* Right side - Contact button */}
-          <div className="hidden md:flex items-center gap-4">
-            <motion.a
-              href="#contact"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-2 bg-foreground text-background px-4 py-2 text-xs font-mono uppercase tracking-wider rounded-full"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-              </svg>
-              Contact
-            </motion.a>
-          </div>
+          {showContact && (
+            <div className="hidden md:flex items-center gap-4">
+              <motion.a
+                href="#contact"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex items-center gap-2 bg-foreground text-background px-4 py-2 text-xs font-mono uppercase tracking-wider rounded-full"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+                Contact
+              </motion.a>
+            </div>
+          )}
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden relative w-8 h-8 flex items-center justify-center border border-border rounded-full"
@@ -153,7 +173,6 @@ export function Navigation() {
         </nav>
       </motion.header>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -161,34 +180,36 @@ export function Navigation() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-background md:hidden pt-20"
+            className="fixed inset-0 z-40 bg-background md:hidden pt-20 overflow-y-auto"
           >
-            <nav className="flex flex-col items-center justify-center h-full gap-8">
-              {navItems.map((item, i) => (
+            <nav className="flex flex-col items-center justify-center min-h-[calc(100vh-5rem)] gap-8 py-12">
+              {items.map((item, i) => (
                 <motion.a
-                  key={item.label}
+                  key={`${item.href}-${item.label}`}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ delay: i * 0.1 }}
-                  className="text-4xl font-black tracking-tight text-pixel"
+                  className="text-4xl font-black tracking-tight text-pixel text-center break-words max-w-[90vw]"
                 >
                   {item.label.toUpperCase()}
                 </motion.a>
               ))}
-              <motion.a
-                href="#contact"
-                onClick={() => setMobileMenuOpen(false)}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ delay: 0.4 }}
-                className="mt-8 tag-pink px-6 py-3 text-sm font-mono uppercase text-white"
-              >
-                Contact Me
-              </motion.a>
+              {showContact && (
+                <motion.a
+                  href="#contact"
+                  onClick={() => setMobileMenuOpen(false)}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ delay: 0.4 }}
+                  className="mt-8 tag-pink px-6 py-3 text-sm font-mono uppercase text-white"
+                >
+                  Contact Me
+                </motion.a>
+              )}
             </nav>
           </motion.div>
         )}

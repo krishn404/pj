@@ -3,9 +3,13 @@
 import { motion, useInView } from "framer-motion"
 import { useRef, useState } from "react"
 import { ArrowUpRight } from "lucide-react"
-import { services as servicesContent } from "@/lib/content"
+import type { ServicesSectionDTO } from "@/lib/cms/types/portfolio"
 
-export function Services() {
+type ServicesProps = {
+  services: ServicesSectionDTO
+}
+
+export function Services({ services: servicesContent }: ServicesProps) {
   const containerRef = useRef<HTMLElement>(null)
   const isInView = useInView(containerRef, { once: true, margin: "-100px" })
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)

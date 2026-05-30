@@ -1,64 +1,66 @@
-import type { Metadata } from 'next'
-import { Inter, Give_You_Glory, Foldit, Boldonse } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
-import { site } from '@/lib/content'
-import { LenisProvider } from '@/components/lenis-provider'
-import './globals.css'
+import type { Metadata } from "next"
+import { Inter, Give_You_Glory, Foldit, Boldonse } from "next/font/google"
+import { getPortfolio } from "@/lib/cms/queries/get-portfolio"
+import "./globals.css"
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ["latin"],
-  variable: '--font-inter',
-  display: 'swap',
-});
+  variable: "--font-inter",
+  display: "swap",
+})
 
 const giveYouGlory = Give_You_Glory({
-  subsets: ['latin'],
-  weight: '400',
-  variable: '--font-give-you-glory',
-  display: 'swap',
-});
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-give-you-glory",
+  display: "swap",
+})
 
 const foldit = Foldit({
-  subsets: ['latin'],
-  variable: '--font-foldit',
-  display: 'swap',
-});
+  subsets: ["latin"],
+  variable: "--font-foldit",
+  display: "swap",
+})
 
 const boldonse = Boldonse({
-  subsets: ['latin'],
-  weight: '400',
-  variable: '--font-boldonse',
-  display: 'swap',
-});
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-boldonse",
+  display: "swap",
+  adjustFontFallback: false,
+})
 
-export const metadata: Metadata = {
-  title: `${site.name} — ${site.title}`,
-  description: `${site.title} based in ${site.location}. ${site.availability}. Creating cinematic edits, motion graphics, and visual storytelling for brands and creators.`,
-  generator: 'v0.app',
-  keywords: ['video editor', 'visual artist', 'motion graphics', 'video editing', 'content creator', 'Punjab'],
-  authors: [{ name: site.name }],
-  openGraph: {
-    title: `${site.name} — ${site.title}`,
-    description: 'Creating cinematic edits, motion graphics, and visual storytelling for brands and creators.',
-    type: 'website',
-  },
-  icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const { site } = await getPortfolio()
+  return {
+    title: site.seo.title,
+    description: site.seo.description,
+    generator: "v0.app",
+    keywords: site.seo.keywords,
+    authors: [{ name: site.name }],
+    openGraph: {
+      title: site.seo.title,
+      description: site.seo.ogDescription,
+      type: "website",
+    },
+    icons: {
+      icon: [
+        {
+          url: "/icon-light-32x32.png",
+          media: "(prefers-color-scheme: light)",
+        },
+        {
+          url: "/icon-dark-32x32.png",
+          media: "(prefers-color-scheme: dark)",
+        },
+        {
+          url: "/icon.svg",
+          type: "image/svg+xml",
+        },
+      ],
+      apple: "/apple-icon.png",
+    },
+  }
 }
 
 export default function RootLayout({
@@ -67,13 +69,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${giveYouGlory.variable} ${foldit.variable} ${boldonse.variable} bg-background`} suppressHydrationWarning>
-      <body className="font-sans antialiased" suppressHydrationWarning>
-        <LenisProvider>
-          <div className="grain" aria-hidden="true" />
-          {children}
-        </LenisProvider>
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+    <html
+      lang="en"
+      className={`${inter.variable} ${giveYouGlory.variable} ${foldit.variable} ${boldonse.variable} bg-background`}
+      suppressHydrationWarning
+    >
+      <body className="font-sans antialiased overflow-x-clip" suppressHydrationWarning>
+        {children}
       </body>
     </html>
   )

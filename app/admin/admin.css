@@ -1,0 +1,54 @@
+/* Admin shell — matches public portfolio (light, editorial) */
+
+.admin-shell {
+  --admin-sidebar-width: 15rem;
+}
+
+.admin-shell .admin-sidebar {
+  background: var(--background);
+  border-color: var(--border);
+}
+
+.admin-shell .admin-main-header {
+  background: color-mix(in oklab, var(--background) 92%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.admin-label {
+  font-size: 0.6875rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.admin-panel {
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+.admin-field {
+  border-color: var(--border);
+  background: var(--background);
+}
+
+.admin-nav-active {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+.admin-stat-accent-gold {
+  border-left: 3px solid var(--gold);
+}
+.admin-stat-accent-mint {
+  border-left: 3px solid var(--mint);
+}
+.admin-stat-accent-pink {
+  border-left: 3px solid var(--pink);
+}
+.admin-stat-accent-cyan {
+  border-left: 3px solid var(--cyan);
+}
+.admin-stat-accent-cream {
+  border-left: 3px solid var(--cream);
+}

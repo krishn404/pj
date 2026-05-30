@@ -3,47 +3,14 @@
 import { motion, useInView } from "framer-motion"
 import { useRef, useState } from "react"
 import { ArrowUpRight } from "lucide-react"
+import type { WorkSectionDTO } from "@/lib/cms/types/portfolio"
 
-const projects = [
-  {
-    title: "Brand Campaign",
-    category: "Commercial",
-    year: "2025",
-    description: "Full campaign edit for lifestyle brand launch",
-    accent: "#E8B84A",
-    hoverBg: "rgba(232, 184, 74, 0.14)",
-    tagText: "#1a1a1a",
-  },
-  {
-    title: "Creator Series",
-    category: "YouTube",
-    year: "2025",
-    description: "Long-form content editing for digital creators",
-    accent: "#8DD8C5",
-    hoverBg: "rgba(141, 216, 197, 0.18)",
-    tagText: "#1a1a1a",
-  },
-  {
-    title: "Product Launch",
-    category: "Social",
-    year: "2024",
-    description: "Reels and short-form content for e-commerce",
-    accent: "#E85A71",
-    hoverBg: "rgba(232, 90, 113, 0.14)",
-    tagText: "#ffffff",
-  },
-  {
-    title: "Motion Studies",
-    category: "Experimental",
-    year: "2024",
-    description: "Visual experiments and audio-reactive work",
-    accent: "#4AC3E8",
-    hoverBg: "rgba(74, 195, 232, 0.16)",
-    tagText: "#1a1a1a",
-  },
-]
+type WorkProps = {
+  work: WorkSectionDTO
+}
 
-export function Work() {
+export function Work({ work }: WorkProps) {
+  const { label, title, projects } = work
   const containerRef = useRef<HTMLElement>(null)
   const isInView = useInView(containerRef, { once: true, margin: "-100px" })
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
@@ -67,7 +34,7 @@ export function Work() {
             transition={{ duration: 0.5 }}
             className="tag-pink px-3 py-1.5 text-xs font-mono uppercase tracking-wider sticky-note inline-block text-white"
           >
-            Case Study
+            {label}
           </motion.span>
           <motion.h2
             initial={{ opacity: 0, y: 40 }}
@@ -75,7 +42,7 @@ export function Work() {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="mt-4 text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-pixel"
           >
-            PROJECTS
+            {title}
           </motion.h2>
         </motion.div>
 
@@ -85,7 +52,7 @@ export function Work() {
 
             return (
               <motion.article
-                key={project.title}
+                key={project.id}
                 initial={{ opacity: 0, y: 40 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: index * 0.1 }}

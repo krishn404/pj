@@ -2,9 +2,13 @@
 
 import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
-import { skills as skillsContent } from "@/lib/content"
+import type { SkillsSectionDTO } from "@/lib/cms/types/portfolio"
 
-export function Skills() {
+type SkillsProps = {
+  skills: SkillsSectionDTO
+}
+
+export function Skills({ skills: skillsContent }: SkillsProps) {
   const containerRef = useRef<HTMLElement>(null)
   const isInView = useInView(containerRef, { once: true, margin: "-100px" })
 

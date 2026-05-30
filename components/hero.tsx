@@ -2,7 +2,12 @@
 
 import { motion } from "framer-motion"
 import { useState, useEffect, useRef } from "react"
-import { hero as heroContent, site } from "@/lib/content"
+import type { HeroDTO, SiteDTO } from "@/lib/cms/types/portfolio"
+
+type HeroProps = {
+  hero: HeroDTO
+  site: SiteDTO
+}
 
 function SelectionHandles({ isHovered }: { isHovered: boolean }) {
   const positions = [
@@ -92,7 +97,7 @@ function ScribbleUnderline({ color = "#1a1a1a" }: { color?: string }) {
   )
 }
 
-export function Hero() {
+export function Hero({ hero: heroContent, site }: HeroProps) {
   const [mounted, setMounted] = useState(false)
   const [currentTime, setCurrentTime] = useState("")
   const [nameHovered, setNameHovered] = useState(false)

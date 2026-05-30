@@ -1,6 +1,7 @@
 /**
- * Site copy — sourced from content.md
- * Update content.md first, then mirror changes here.
+ * @deprecated Legacy static content — used only by `npm run db:seed` and the
+ * server fallback when DATABASE_URL is unset. Public UI reads from getPortfolio().
+ * Update content via the admin CMS once CRUD is enabled.
  */
 
 export const site = {
@@ -47,7 +48,7 @@ export const about = {
 
 export const showreel = {
   label: "Featured",
-  title: "SHOWREEL",
+  title: "VIDEO GALLERY",
   period: "2024 — Present",
   placeholderCta: "Click to play",
   caption:
