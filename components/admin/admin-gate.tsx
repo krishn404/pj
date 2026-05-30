@@ -128,7 +128,7 @@ export function AdminGate() {
         animate={shake ? { x: [0, -10, 10, -8, 8, 0] } : { x: 0 }}
         transition={{ duration: 0.4 }}
         className="mt-12 flex items-center justify-center gap-4 sm:gap-5"
-        aria-label="Enter sequence using arrow keys"
+        aria-label=""
       >
         {STEPS.map((step, index) => {
           const filled = progress > index
@@ -192,7 +192,7 @@ export function AdminGate() {
       </motion.div>
 
       <p className="mt-8 text-[10px] font-mono uppercase tracking-[0.35em] text-muted-foreground/60">
-        arrow keys only
+        
       </p>
 
       {unlocking && (
