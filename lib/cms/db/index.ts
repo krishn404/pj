@@ -8,7 +8,12 @@ function createDb() {
   if (!connectionString) {
     return null
   }
-  const client = postgres(connectionString, { prepare: false, max: 1 })
+  const client = postgres(connectionString, {
+    prepare: false,
+    max: 1,
+    connect_timeout: 5,
+    idle_timeout: 10,
+  })
   return drizzle(client, { schema })
 }
 
